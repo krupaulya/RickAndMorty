@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.rickandmorty.MainActivity">
+    <item
+        android:id="@+id/CharactersFragment"
+        android:icon="@drawable/ic_rick_24"
+        android:title="@string/characters" />
+    <item
+        android:id="@+id/LocationsFragment"
+        android:icon="@drawable/ic_map"
+        android:title="@string/locations" />
+    <item
+        android:id="@+id/EpisodesFragment"
+        android:icon="@drawable/ic_episode"
+        android:title="@string/episodes" />
+</menu>
