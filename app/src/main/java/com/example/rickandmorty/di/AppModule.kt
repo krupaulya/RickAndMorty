@@ -1,29 +1,42 @@
 package com.example.rickandmorty.di
 
-import android.content.Context
-import com.example.rickandmorty.domain.CharactersRepository
+import com.example.rickandmorty.CharactersRemoteData
 import com.example.rickandmorty.data.CharactersApi
-import com.example.rickandmorty.data.CharactersRepositoryImpl
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
+import javax.inject.Singleton
 
-interface AppModule {
-    val charactersApi: CharactersApi
-    val charactersRepository: CharactersRepository
-}
+@Module
+@InstallIn(SingletonComponent::class)
+object AppModule {
 
-class AppModuleImpl(
-    private val appContext: Context
-) : AppModule {
-    override val charactersApi: CharactersApi by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://rickandmortyapi.com/api/characters")
+    @Provides
+    @Singleton
+    fun provideCharactersApi(): CharactersApi {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://rickandmortyapi.com/api/")
+            .client(
+                OkHttpClient().newBuilder()
+                    .addInterceptor(
+                        HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        })
+                    .build()
+            )
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create()
+        return retrofit.create(CharactersApi::class.java)
     }
-    override val charactersRepository: CharactersRepository by lazy {
-        CharactersRepositoryImpl(charactersApi)
-    }
+
+    @Provides
+    @Singleton
+    fun provideCharactersRemoteData(charactersApi: CharactersApi): CharactersRemoteData =
+        CharactersRemoteData(charactersApi)
+
 }
