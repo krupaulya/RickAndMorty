@@ -1,55 +1,80 @@
 package com.example.rickandmorty.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.rickandmorty.data.model.Results
+import com.example.rickandmorty.data.model.Characters
 import com.example.rickandmorty.databinding.CharacterRecyclerItemBinding
 import javax.inject.Inject
 
-class CharactersAdapter @Inject constructor() : RecyclerView.Adapter<CharactersAdapter.CharactersViewHolder>() {
+class CharactersAdapter @Inject constructor(
 
-    var characters = mutableListOf<Results>()
+) :
+    RecyclerView.Adapter<CharactersAdapter.CharactersViewHolder>() {
 
-    class CharactersViewHolder(val binding: CharacterRecyclerItemBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-        init {
-            binding.root.setOnClickListener(this)
+    inner class CharactersViewHolder(
+        val binding: CharacterRecyclerItemBinding,
+    ) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun setItem(character: Characters.CharactersResults) {
+            binding.apply {
+                setAvatar(characterAvatar, character.image)
+                characterGender.text = character.gender
+                characterName.text = character.name
+                characterStatus.text = character.status
+                characterSpecies.text = character.species
+                root.setOnClickListener {
+                    onItemClickListener?.let {
+                        it(character)
+                    }
+                }
+            }
         }
 
-        override fun onClick(p0: View?) {
-
+        private fun setAvatar(imageView: ImageView, url: String?) {
+            url?.let {
+                Glide.with(imageView).load(it).into(imageView)
+            }
         }
     }
 
+    private var onItemClickListener: ((Characters.CharactersResults) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (Characters.CharactersResults) -> Unit) {
+        onItemClickListener = listener
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {
         val binding =
             CharacterRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharactersViewHolder(binding)
     }
 
-    override fun getItemCount() = characters.size
+    override fun getItemCount() = differ.currentList.size
 
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {
-        val character = characters[position]
-        setAvatar(holder.binding.characterAvatar, character.image)
-        holder.binding.characterGender.text = character.gender
-        holder.binding.characterName.text = character.name
-        holder.binding.characterStatus.text = character.status
-        holder.binding.characterSpecies.text = character.species
+        holder.setItem(differ.currentList[position])
+        holder.setIsRecyclable(false)
     }
 
-    fun setData(characters: List<Results>) {
-        this.characters = characters.toMutableList()
-        notifyDataSetChanged()
-    }
+    private val differCallback = object : DiffUtil.ItemCallback<Characters.CharactersResults>() {
+        override fun areItemsTheSame(
+            oldItem: Characters.CharactersResults,
+            newItem: Characters.CharactersResults
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    private fun setAvatar(imageView: ImageView, url: String?) {
-        url?.let {
-            Glide.with(imageView).load(it).into(imageView)
+        override fun areContentsTheSame(
+            oldItem: Characters.CharactersResults,
+            newItem: Characters.CharactersResults
+        ): Boolean {
+            return oldItem.id == newItem.id
         }
     }
+
+    val differ = AsyncListDiffer(this, differCallback)
 }

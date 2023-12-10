@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.rickandmorty.databinding.FragmentEpisodeDetailsBinding
 
 class EpisodeDetailsFragment : Fragment() {
 
-    private var _binding: FragmentEpisodeDetailsBinding? = null
+    private var binding: FragmentEpisodeDetailsBinding? = null
 
-    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,13 +22,21 @@ class EpisodeDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentEpisodeDetailsBinding.inflate(inflater, container, false)
-        return binding.root
+        binding = FragmentEpisodeDetailsBinding.inflate(inflater, container, false)
+        return binding!!.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentEpisodeDetailsBinding.bind(view)
+        binding!!.epDetailBackButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        binding = null
     }
 
 }

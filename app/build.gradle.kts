@@ -64,7 +64,6 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-extensions:2.2.0")
     implementation ("androidx.lifecycle:lifecycle-common-java8:2.6.2")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-    annotationProcessor ("androidx.room:room-compiler:2.6.1")
     androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
 
     implementation ("com.github.bumptech.glide:glide:4.16.0")
@@ -76,8 +75,14 @@ dependencies {
 
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    implementation ("androidx.paging:paging-common-ktx:3.2.1")
+    implementation ("androidx.paging:paging-runtime-ktx:3.2.1")
 }
 
 kapt {
     correctErrorTypes = true
+    useBuildCache = true
 }

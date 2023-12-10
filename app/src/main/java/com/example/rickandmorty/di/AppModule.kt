@@ -1,7 +1,7 @@
 package com.example.rickandmorty.di
 
-import com.example.rickandmorty.CharactersRemoteData
-import com.example.rickandmorty.data.CharactersApi
+import com.example.rickandmorty.RickMortyRemoteData
+import com.example.rickandmorty.data.RickMortyApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +18,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCharactersApi(): CharactersApi {
+    fun provideRickMortyApi(): RickMortyApi {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://rickandmortyapi.com/api/")
             .client(
@@ -31,12 +31,11 @@ object AppModule {
             )
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        return retrofit.create(CharactersApi::class.java)
+        return retrofit.create(RickMortyApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideCharactersRemoteData(charactersApi: CharactersApi): CharactersRemoteData =
-        CharactersRemoteData(charactersApi)
-
+    fun provideRickMortyRemoteData(rickMortyApi: RickMortyApi): RickMortyRemoteData =
+        RickMortyRemoteData(rickMortyApi)
 }
