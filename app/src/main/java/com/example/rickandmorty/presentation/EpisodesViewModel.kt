@@ -2,8 +2,13 @@ package com.example.rickandmorty.presentation
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import com.example.rickandmorty.data.model.Episodes
 import com.example.rickandmorty.domain.RickMortyRepository
+import com.example.rickandmorty.paging.EpisodesPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,16 +21,22 @@ import javax.inject.Inject
 class EpisodesViewModel @Inject constructor(
     private val repository: RickMortyRepository
 ) : ViewModel() {
+
     private val _episodes = MutableLiveData<List<Episodes.EpisodesResults>>()
     val episodes: MutableLiveData<List<Episodes.EpisodesResults>> get() = _episodes
+    private val _episode = MutableLiveData<Episodes.EpisodesResults>()
+    val episode: MutableLiveData<Episodes.EpisodesResults> get() = _episode
     private var job: Job? = null
+    val episodeList = Pager(PagingConfig(1)) {
+        EpisodesPagingSource(repository)
+    }.flow.cachedIn(viewModelScope)
 
-    fun getEpisodes() {
+    fun getEpisodeById(id: Int) {
         job = CoroutineScope(Dispatchers.IO).launch {
-            val response = repository.getEpisodes()
+            val response = repository.getEpisodeById(id)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    _episodes.postValue(response.body()!!.results)
+                    _episode.postValue(response.body())
                 }
             }
         }

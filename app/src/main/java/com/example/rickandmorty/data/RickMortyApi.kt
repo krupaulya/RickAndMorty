@@ -7,10 +7,11 @@ import com.example.rickandmorty.data.model.Locations
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface RickMortyApi {
     @GET("character")
-    suspend fun getCharacters(): Response<Characters>
+    suspend fun getCharacters(@Query("page") page: Int): Response<Characters>
 
     @GET("character/{id}")
     suspend fun getCharacterById(
@@ -23,7 +24,7 @@ interface RickMortyApi {
     ): Response<List<Characters.CharactersResults>>
 
     @GET("location")
-    suspend fun getLocations(): Response<Locations>
+    suspend fun getLocations(@Query("page") page: Int): Response<Locations>
 
     @GET("location/{id}")
     suspend fun getLocationById(
@@ -36,7 +37,7 @@ interface RickMortyApi {
     ): Response<List<Locations.LocationsResults>>
 
     @GET("episode")
-    suspend fun getEpisodes(): Response<Episodes>
+    suspend fun getEpisodes(@Query("page") page: Int): Response<Episodes>
 
     @GET("episode/{id}")
     suspend fun getEpisodeById(

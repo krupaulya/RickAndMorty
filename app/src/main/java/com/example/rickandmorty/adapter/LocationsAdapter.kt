@@ -2,7 +2,7 @@ package com.example.rickandmorty.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rickandmorty.data.model.Locations
@@ -10,7 +10,9 @@ import com.example.rickandmorty.databinding.SharedRecyclerItemBinding
 import javax.inject.Inject
 
 class LocationsAdapter @Inject constructor() :
-    RecyclerView.Adapter<LocationsAdapter.LocationsViewHolder>() {
+    PagingDataAdapter<Locations.LocationsResults, LocationsAdapter.LocationsViewHolder>(
+        diffUtlCallBack
+    ) {
 
     inner class LocationsViewHolder(val binding: SharedRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -35,10 +37,8 @@ class LocationsAdapter @Inject constructor() :
         return LocationsViewHolder(binding)
     }
 
-    override fun getItemCount() = differ.currentList.size
-
     override fun onBindViewHolder(holder: LocationsViewHolder, position: Int) {
-        holder.setItem(differ.currentList[position])
+        holder.setItem(getItem(position)!!)
         holder.setIsRecyclable(false)
     }
 
@@ -48,20 +48,22 @@ class LocationsAdapter @Inject constructor() :
         onItemClickListener = listener
     }
 
-    private val diffUtlCallBack = object : DiffUtil.ItemCallback<Locations.LocationsResults>() {
-        override fun areItemsTheSame(oldItem: Locations.LocationsResults, newItem: Locations.LocationsResults): Boolean {
-            return oldItem.id == newItem.id
-        }
+    companion object {
+        private val diffUtlCallBack = object : DiffUtil.ItemCallback<Locations.LocationsResults>() {
+            override fun areItemsTheSame(
+                oldItem: Locations.LocationsResults,
+                newItem: Locations.LocationsResults
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
 
-        override fun areContentsTheSame(
-            oldItem: Locations.LocationsResults,
-            newItem: Locations.LocationsResults
-        ): Boolean {
-            return oldItem.id == newItem.id
+            override fun areContentsTheSame(
+                oldItem: Locations.LocationsResults,
+                newItem: Locations.LocationsResults
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
         }
     }
-
-    val differ = AsyncListDiffer(this, diffUtlCallBack)
-
 }
 

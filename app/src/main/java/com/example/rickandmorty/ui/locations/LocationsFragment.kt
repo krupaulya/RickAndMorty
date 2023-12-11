@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.rickandmorty.R
@@ -14,6 +17,7 @@ import com.example.rickandmorty.adapter.LocationsAdapter
 import com.example.rickandmorty.databinding.FragmentLocationsBinding
 import com.example.rickandmorty.presentation.LocationsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -38,26 +42,40 @@ class LocationsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLocationsBinding.bind(view)
         locationsAdapter = LocationsAdapter()
-        binding!!.locationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding!!.locationRecyclerView.adapter = locationsAdapter
-        locationsViewModel.getLocations()
-        locationsViewModel.locations.observe(viewLifecycleOwner) {
-            locationsAdapter.differ.submitList(it)
+        binding?.apply {
+            locationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            locationRecyclerView.adapter = locationsAdapter
+            viewLifecycleOwner.apply {
+                lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.CREATED) {
+                        locationsViewModel.locationList.collect {
+                            locationsAdapter.submitData(it)
+                        }
+                    }
+                }
+            }
+            locationBackButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            locationsRefresh.setOnRefreshListener {
+                locationsRefresh.isRefreshing = false
+                viewLifecycleOwner.apply {
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            locationsViewModel.locationList.collect {
+                                locationsAdapter.submitData(it)
+                            }
+                        }
+                    }
+                }
+            }
         }
         locationsAdapter.setOnItemClickListener {
             val bundle = bundleOf("locationId" to it.id)
-            findNavController().navigate(R.id.action_LocationsFragment_to_locationDetailsFragment, bundle)
-        }
-        binding!!.locationBackButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding?.apply {
-            locationsRefresh.setOnRefreshListener {
-                locationsRefresh.isRefreshing = false
-                locationsViewModel.locations.observe(viewLifecycleOwner) {
-                    locationsAdapter.differ.submitList(it)
-                }
-            }
+            findNavController().navigate(
+                R.id.action_LocationsFragment_to_locationDetailsFragment,
+                bundle
+            )
         }
     }
 

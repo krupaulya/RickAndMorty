@@ -3,7 +3,7 @@ package com.example.rickandmorty.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,7 +14,9 @@ import javax.inject.Inject
 class CharactersAdapter @Inject constructor(
 
 ) :
-    RecyclerView.Adapter<CharactersAdapter.CharactersViewHolder>() {
+    PagingDataAdapter<Characters.CharactersResults, CharactersAdapter.CharactersViewHolder>(
+        differCallback
+    ) {
 
     inner class CharactersViewHolder(
         val binding: CharacterRecyclerItemBinding,
@@ -47,34 +49,34 @@ class CharactersAdapter @Inject constructor(
     fun setOnItemClickListener(listener: (Characters.CharactersResults) -> Unit) {
         onItemClickListener = listener
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {
         val binding =
             CharacterRecyclerItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharactersViewHolder(binding)
     }
 
-    override fun getItemCount() = differ.currentList.size
-
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {
-        holder.setItem(differ.currentList[position])
+        holder.setItem(getItem(position)!!)
         holder.setIsRecyclable(false)
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<Characters.CharactersResults>() {
-        override fun areItemsTheSame(
-            oldItem: Characters.CharactersResults,
-            newItem: Characters.CharactersResults
-        ): Boolean {
-            return oldItem.id == newItem.id
-        }
+    companion object {
+        private val differCallback =
+            object : DiffUtil.ItemCallback<Characters.CharactersResults>() {
+                override fun areItemsTheSame(
+                    oldItem: Characters.CharactersResults,
+                    newItem: Characters.CharactersResults
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-        override fun areContentsTheSame(
-            oldItem: Characters.CharactersResults,
-            newItem: Characters.CharactersResults
-        ): Boolean {
-            return oldItem.id == newItem.id
-        }
+                override fun areContentsTheSame(
+                    oldItem: Characters.CharactersResults,
+                    newItem: Characters.CharactersResults
+                ): Boolean {
+                    return oldItem.id == newItem.id
+                }
+            }
     }
-
-    val differ = AsyncListDiffer(this, differCallback)
 }

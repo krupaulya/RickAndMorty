@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.rickandmorty.R
@@ -14,6 +17,7 @@ import com.example.rickandmorty.adapter.EpisodesAdapter
 import com.example.rickandmorty.databinding.FragmentEpisodesBinding
 import com.example.rickandmorty.presentation.EpisodesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,10 +29,6 @@ class EpisodesFragment : Fragment() {
 
     @Inject
     lateinit var episodesAdapter: EpisodesAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,26 +42,40 @@ class EpisodesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentEpisodesBinding.bind(view)
         episodesAdapter = EpisodesAdapter()
-        binding!!.episodesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding!!.episodesRecyclerView.adapter = episodesAdapter
-        episodesViewModel.getEpisodes()
-        episodesViewModel.episodes.observe(viewLifecycleOwner) {
-            episodesAdapter.differ.submitList(it)
+        binding?.apply {
+            episodesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+            episodesRecyclerView.adapter = episodesAdapter
+            viewLifecycleOwner.apply {
+                lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.CREATED) {
+                        episodesViewModel.episodeList.collect {
+                            episodesAdapter.submitData(it)
+                        }
+                    }
+                }
+            }
+            episodeBackButton.setOnClickListener {
+                findNavController().popBackStack()
+            }
+            episodesRefresh.setOnRefreshListener {
+                episodesRefresh.isRefreshing = false
+                viewLifecycleOwner.apply {
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            episodesViewModel.episodeList.collect {
+                                episodesAdapter.submitData(it)
+                            }
+                        }
+                    }
+                }
+            }
         }
         episodesAdapter.setOnItemClickListener {
             val bundle = bundleOf("episodeId" to it.id)
-            findNavController().navigate(R.id.action_EpisodesFragment_to_episodeDetailsFragment, bundle)
-        }
-        binding!!.episodeBackButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding?.apply {
-            episodesRefresh.setOnRefreshListener {
-                episodesRefresh.isRefreshing = false
-                episodesViewModel.episodes.observe(viewLifecycleOwner) {
-                    episodesAdapter.differ.submitList(it)
-                }
-            }
+            findNavController().navigate(
+                R.id.action_EpisodesFragment_to_episodeDetailsFragment,
+                bundle
+            )
         }
     }
 
