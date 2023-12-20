@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import com.example.rickandmorty.data.model.Characters
 import com.example.rickandmorty.data.model.Locations
 import com.example.rickandmorty.domain.RickMortyRepository
+import com.example.rickandmorty.getIDs
 import com.example.rickandmorty.paging.LocationsPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +29,8 @@ class LocationsViewModel @Inject constructor(
     private val _location = MutableLiveData<Locations.LocationsResults>()
     val location: MutableLiveData<Locations.LocationsResults> get() = _location
     private var job: Job? = null
+    private val _characters = MutableLiveData<List<Characters.CharactersResults>>()
+    val characters: MutableLiveData<List<Characters.CharactersResults>> get() = _characters
     val locationList = Pager(PagingConfig(1)) {
         LocationsPagingSource(repository)
     }.flow.cachedIn(viewModelScope)
@@ -37,6 +41,9 @@ class LocationsViewModel @Inject constructor(
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     _location.postValue(response.body())
+                    val characterIds = getIDs(response.body()!!.residents)
+                    val charactersResponse = repository.getMultipleCharacters(characterIds)
+                    _characters.postValue(charactersResponse.body())
                 }
             }
         }

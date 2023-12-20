@@ -1,37 +1,16 @@
 package com.example.rickandmorty.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.example.rickandmorty.converter.Converters
 import com.example.rickandmorty.data.model.Characters
 import com.example.rickandmorty.data.model.Episodes
 import com.example.rickandmorty.data.model.Locations
 import com.example.rickandmorty.database.dao.CharactersDao
 
 @Database(entities = [Characters::class, Locations::class, Episodes::class], version = 3)
+@TypeConverters(Converters::class)
 abstract class RMDatabase: RoomDatabase() {
     abstract fun charactersDao(): CharactersDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: RMDatabase? = null
-
-        fun getInstance(context: Context): RMDatabase {
-            synchronized(this) {
-                var instance = INSTANCE
-                if (instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        RMDatabase::class.java,
-                        "database.db"
-                    )
-                        .fallbackToDestructiveMigration()
-                        .build()
-                    INSTANCE = instance
-                }
-                return instance
-            }
-        }
-    }
 }

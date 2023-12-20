@@ -1,9 +1,10 @@
 package com.example.rickandmorty.data.model
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity
+@Entity(tableName = "characters")
 data class Characters(
     @SerializedName("info")
     val info: CharactersInfo,
@@ -22,6 +23,7 @@ data class Characters(
     )
 
     data class CharactersResults(
+        @PrimaryKey
         @SerializedName("id")
         val id: Int,
         @SerializedName("name")

@@ -11,7 +11,10 @@
     <string name="species">Species</string>
     <string name="type">Type</string>
     <string name="gender">Gender</string>
+    <string name="origin">Origin</string>
+    <string name="location">Location</string>
     <string name="dimension">Dimension</string>
     <string name="episode">Episode</string>
+    <string name="air_date">Air date</string>
     <string name="back_button">Back Button</string>
 </resources>
