@@ -9,7 +9,7 @@ import com.example.rickandmorty.data.model.Episodes
 import com.example.rickandmorty.data.model.Locations
 import com.example.rickandmorty.database.dao.CharactersDao
 
-@Database(entities = [Characters::class, Locations::class, Episodes::class], version = 3)
+@Database(entities = [Characters::class, Locations::class, Episodes::class], version = 3, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RMDatabase: RoomDatabase() {
     abstract fun charactersDao(): CharactersDao

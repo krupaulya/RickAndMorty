@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName
 
 @Entity
 data class Locations(
+    @PrimaryKey
     @SerializedName("info")
     val info: LocationsInfo,
     @SerializedName("results")
