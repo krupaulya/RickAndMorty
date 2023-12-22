@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rickandmorty.data.model.Episodes
+import com.example.rickandmorty.data.model.EpisodesResults
 import com.example.rickandmorty.databinding.SharedRecyclerItemBinding
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ class CharacterEpisodesAdapter @Inject constructor() :
     inner class ViewHolder(val binding: SharedRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(episode: Episodes.EpisodesResults) {
+        fun bind(episode: EpisodesResults) {
             binding.apply {
                 locEpName.text = episode.name
                 locTypeEpDate.text = episode.airDate
@@ -41,21 +41,21 @@ class CharacterEpisodesAdapter @Inject constructor() :
         holder.bind(differ.currentList[position])
     }
 
-    private var onItemClickListener: ((Episodes.EpisodesResults) -> Unit)? = null
+    private var onItemClickListener: ((EpisodesResults) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Episodes.EpisodesResults) -> Unit) {
+    fun setOnItemClickListener(listener: (EpisodesResults) -> Unit) {
         onItemClickListener = listener
     }
 
-    private val differCallback = object : DiffUtil.ItemCallback<Episodes.EpisodesResults>() {
+    private val differCallback = object : DiffUtil.ItemCallback<EpisodesResults>() {
         override fun areItemsTheSame(
-            oldItem: Episodes.EpisodesResults, newItem: Episodes.EpisodesResults
+            oldItem: EpisodesResults, newItem: EpisodesResults
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: Episodes.EpisodesResults, newItem: Episodes.EpisodesResults
+            oldItem: EpisodesResults, newItem: EpisodesResults
         ): Boolean {
             return oldItem == newItem
         }

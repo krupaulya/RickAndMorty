@@ -5,17 +5,17 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rickandmorty.data.model.Episodes
+import com.example.rickandmorty.data.model.EpisodesResults
 import com.example.rickandmorty.databinding.SharedRecyclerItemBinding
 import javax.inject.Inject
 
 class EpisodesAdapter @Inject constructor() :
-    PagingDataAdapter<Episodes.EpisodesResults, EpisodesAdapter.EpisodesViewHolder>(diffUtilCallBack) {
+    PagingDataAdapter<EpisodesResults, EpisodesAdapter.EpisodesViewHolder>(diffUtilCallBack) {
 
     inner class EpisodesViewHolder(val binding: SharedRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun setItem(episode: Episodes.EpisodesResults) {
+        fun setItem(episode: EpisodesResults) {
             binding.apply {
                 locEpName.text = episode.name
                 locTypeEpDate.text = episode.airDate
@@ -40,24 +40,24 @@ class EpisodesAdapter @Inject constructor() :
         holder.setIsRecyclable(false)
     }
 
-    private var onItemClickListener: ((Episodes.EpisodesResults) -> Unit)? = null
+    private var onItemClickListener: ((EpisodesResults) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Episodes.EpisodesResults) -> Unit) {
+    fun setOnItemClickListener(listener: (EpisodesResults) -> Unit) {
         onItemClickListener = listener
     }
 
     companion object {
-        private val diffUtilCallBack = object : DiffUtil.ItemCallback<Episodes.EpisodesResults>() {
+        private val diffUtilCallBack = object : DiffUtil.ItemCallback<EpisodesResults>() {
             override fun areItemsTheSame(
-                oldItem: Episodes.EpisodesResults,
-                newItem: Episodes.EpisodesResults
+                oldItem: EpisodesResults,
+                newItem: EpisodesResults
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: Episodes.EpisodesResults,
-                newItem: Episodes.EpisodesResults
+                oldItem: EpisodesResults,
+                newItem: EpisodesResults
             ): Boolean {
                 return oldItem.id == newItem.id
             }

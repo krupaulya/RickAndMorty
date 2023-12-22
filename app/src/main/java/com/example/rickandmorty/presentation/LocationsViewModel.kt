@@ -1,51 +1,55 @@
 package com.example.rickandmorty.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
-import com.example.rickandmorty.data.model.Characters
-import com.example.rickandmorty.data.model.Locations
-import com.example.rickandmorty.domain.RickMortyRepository
+import androidx.paging.PagingData
+import com.example.rickandmorty.data.model.CharactersResults
+import com.example.rickandmorty.data.model.LocationsResults
+import com.example.rickandmorty.domain.RickAndMortyRepository
 import com.example.rickandmorty.getIDs
-import com.example.rickandmorty.paging.LocationsPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class LocationsViewModel @Inject constructor(
-    private val repository: RickMortyRepository
+    private val repository: RickAndMortyRepository
 ) : ViewModel() {
 
-    private val _locations = MutableLiveData<List<Locations.LocationsResults>>()
-    val locations: MutableLiveData<List<Locations.LocationsResults>> get() = _locations
-    private val _location = MutableLiveData<Locations.LocationsResults>()
-    val location: MutableLiveData<Locations.LocationsResults> get() = _location
-    private var job: Job? = null
-    private val _characters = MutableLiveData<List<Characters.CharactersResults>>()
-    val characters: MutableLiveData<List<Characters.CharactersResults>> get() = _characters
-    val locationList = Pager(PagingConfig(1)) {
-        LocationsPagingSource(repository)
-    }.flow.cachedIn(viewModelScope)
+    private val _locations = MutableLiveData<List<LocationsResults>>()
+    val locations: MutableLiveData<List<LocationsResults>> get() = _locations
+    private val _location = MutableLiveData<LocationsResults>()
+    val location: MutableLiveData<LocationsResults> get() = _location
+    private val _characters = MutableLiveData<List<CharactersResults>>()
+    val characters: MutableLiveData<List<CharactersResults>> get() = _characters
+
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> get() = _loading
+    fun getLocations(): Flow<PagingData<LocationsResults>> =
+        repository.getLocations()
 
     fun getLocationById(id: Int) {
-        job = CoroutineScope(Dispatchers.IO).launch {
-            val response = repository.getLocationById(id)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    _location.postValue(response.body())
-                    val characterIds = getIDs(response.body()!!.residents)
-                    val charactersResponse = repository.getMultipleCharacters(characterIds)
-                    _characters.postValue(charactersResponse.body())
+        viewModelScope.launch {
+            _loading.value = true
+            try {
+                val response = repository.getLocationById(id)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        _location.postValue(response.body())
+                        val characterIds = getIDs(response.body()!!.residents)
+                        val charactersResponse = repository.getMultipleCharacters(characterIds)
+                        _characters.postValue(charactersResponse.body())
+                    }
                 }
+            } finally {
+                _loading.value = false
             }
+
         }
     }
 }

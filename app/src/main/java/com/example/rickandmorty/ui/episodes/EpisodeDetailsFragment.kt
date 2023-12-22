@@ -62,6 +62,9 @@ class EpisodeDetailsFragment : Fragment() {
                 charactersAdapterForDetails.differ.submitList(it)
             }
         }
+        episodesViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            binding?.episodeDetailsProgressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
         charactersAdapterForDetails.setOnItemClickListener {
             val bundle = bundleOf("character" to it.id)
             findNavController().navigate(

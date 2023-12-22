@@ -5,19 +5,19 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rickandmorty.data.model.Locations
+import com.example.rickandmorty.data.model.LocationsResults
 import com.example.rickandmorty.databinding.SharedRecyclerItemBinding
 import javax.inject.Inject
 
 class LocationsAdapter @Inject constructor() :
-    PagingDataAdapter<Locations.LocationsResults, LocationsAdapter.LocationsViewHolder>(
+    PagingDataAdapter<LocationsResults, LocationsAdapter.LocationsViewHolder>(
         diffUtlCallBack
     ) {
 
     inner class LocationsViewHolder(val binding: SharedRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun setItem(location: Locations.LocationsResults) {
+        fun setItem(location: LocationsResults) {
             binding.apply {
                 locEpName.text = location.name
                 locTypeEpDate.text = location.type
@@ -42,24 +42,24 @@ class LocationsAdapter @Inject constructor() :
         holder.setIsRecyclable(false)
     }
 
-    private var onItemClickListener: ((Locations.LocationsResults) -> Unit)? = null
+    private var onItemClickListener: ((LocationsResults) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Locations.LocationsResults) -> Unit) {
+    fun setOnItemClickListener(listener: (LocationsResults) -> Unit) {
         onItemClickListener = listener
     }
 
     companion object {
-        private val diffUtlCallBack = object : DiffUtil.ItemCallback<Locations.LocationsResults>() {
+        private val diffUtlCallBack = object : DiffUtil.ItemCallback<LocationsResults>() {
             override fun areItemsTheSame(
-                oldItem: Locations.LocationsResults,
-                newItem: Locations.LocationsResults
+                oldItem: LocationsResults,
+                newItem: LocationsResults
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: Locations.LocationsResults,
-                newItem: Locations.LocationsResults
+                oldItem: LocationsResults,
+                newItem: LocationsResults
             ): Boolean {
                 return oldItem.id == newItem.id
             }

@@ -50,7 +50,7 @@ class LocationsFragment : Fragment() {
             viewLifecycleOwner.apply {
                 lifecycleScope.launch {
                     repeatOnLifecycle(Lifecycle.State.CREATED) {
-                        locationsViewModel.locationList.collect {
+                        locationsViewModel.getLocations().collect {
                             locationsAdapter.submitData(it)
                         }
                     }
@@ -74,7 +74,7 @@ class LocationsFragment : Fragment() {
                 viewLifecycleOwner.apply {
                     lifecycleScope.launch {
                         repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            locationsViewModel.locationList.collect {
+                            locationsViewModel.getLocations().collect {
                                 locationsAdapter.submitData(it)
                             }
                         }

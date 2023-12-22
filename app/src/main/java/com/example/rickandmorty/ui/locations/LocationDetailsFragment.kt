@@ -61,6 +61,9 @@ class LocationDetailsFragment : Fragment() {
                 charactersAdapterForDetails.differ.submitList(it)
             }
         }
+        locationsViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+            binding?.locationDetailsProgressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
         charactersAdapterForDetails.setOnItemClickListener {
             val bundle = bundleOf("character" to it.id)
             findNavController().navigate(

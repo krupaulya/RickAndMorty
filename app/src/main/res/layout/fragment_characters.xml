@@ -9,7 +9,7 @@
     tools:context=".ui.characters.CharactersFragment">
 
     <SearchView
-        android:id="@+id/search_view"
+        android:id="@+id/search_view_characters"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +23,7 @@
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view">
+        app:layout_constraintTop_toBottomOf="@+id/search_view_characters">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -96,20 +96,145 @@
 
     </HorizontalScrollView>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/characters_refresh"
+    <FrameLayout
+        android:id="@+id/characterFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="140dp"
+        android:layout_height="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scroll_view">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/character_recycler_view"
+        <HorizontalScrollView
+            android:id="@+id/scroll_view_gender_filter"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_view">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/male_gender"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/filter_element"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/male"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/female_gender"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/filter_element"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/female"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/genderless_gender"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/filter_element"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/genderless"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/unknown_gender"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/filter_element"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:text="@string/unknown"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/status_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/character_recycler_item" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/status_alive"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/filter_element"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/alive"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/status_dead"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/filter_element"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/dead"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/status_unknown"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/filter_element"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="@string/unknown"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/characters_refresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/characterFrameLayout">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/character_recycler_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:listitem="@layout/character_recycler_item"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/characterFrameLayout"/>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
@@ -117,9 +242,9 @@
         android:id="@+id/character_progress_bar"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

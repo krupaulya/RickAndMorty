@@ -14,5 +14,8 @@ fun getIDs(urls: List<String>): List<Int> {
 fun getID(url: String): Int {
     val lastSlashIndex = url.lastIndexOf('/')
     val idString = url.substring(lastSlashIndex + 1)
-    return idString.toInt()
+    if (idString.isNotEmpty()) {
+        return idString.toInt()
+    }
+    return -1
 }

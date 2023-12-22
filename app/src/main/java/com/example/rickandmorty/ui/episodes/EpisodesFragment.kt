@@ -50,7 +50,7 @@ class EpisodesFragment : Fragment() {
             viewLifecycleOwner.apply {
                 lifecycleScope.launch {
                     repeatOnLifecycle(Lifecycle.State.CREATED) {
-                        episodesViewModel.episodeList.collect {
+                        episodesViewModel.getEpisodes().collect {
                             episodesAdapter.submitData(it)
                         }
                     }
@@ -74,7 +74,7 @@ class EpisodesFragment : Fragment() {
                 viewLifecycleOwner.apply {
                     lifecycleScope.launch {
                         repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            episodesViewModel.episodeList.collect {
+                            episodesViewModel.getEpisodes().collect {
                                 episodesAdapter.submitData(it)
                             }
                         }

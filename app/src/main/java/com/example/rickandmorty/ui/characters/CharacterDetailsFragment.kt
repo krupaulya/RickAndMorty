@@ -62,6 +62,9 @@ class CharacterDetailsFragment : Fragment() {
                     )
                 }
             }
+            charactersViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
+                binding?.characterDetailsProgressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+            }
             characterDetailLocation.setOnClickListener {
                 charactersViewModel.locationID.observe(viewLifecycleOwner) {
                     val bundle = bundleOf("locationId" to it)

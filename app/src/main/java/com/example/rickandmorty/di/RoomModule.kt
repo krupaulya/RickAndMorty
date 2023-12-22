@@ -3,6 +3,7 @@ package com.example.rickandmorty.di
 import android.content.Context
 import androidx.room.Room
 import com.example.rickandmorty.database.RMDatabase
+import com.example.rickandmorty.database.dao.CharacterRemoteKeysDao
 import com.example.rickandmorty.database.dao.CharactersDao
 import dagger.Module
 import dagger.Provides
@@ -29,5 +30,11 @@ object RoomModule {
     @Singleton
     fun provideRMDao(rmDatabase: RMDatabase): CharactersDao {
         return rmDatabase.charactersDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCharacterRemoteKeysDao(rmDatabase: RMDatabase): CharacterRemoteKeysDao {
+        return rmDatabase.characterRemoteKeysDao()
     }
 }

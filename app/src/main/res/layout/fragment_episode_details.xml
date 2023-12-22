@@ -25,7 +25,6 @@
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginTop="70dp"
-        android:text="@string/episodes"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,5 +91,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/episode_detail_episode_desc"
         tools:listitem="@layout/character_recycler_item" />
+
+    <ProgressBar
+        android:id="@+id/episode_details_progress_bar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
