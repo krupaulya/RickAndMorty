@@ -39,7 +39,6 @@ class LocationsAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: LocationsViewHolder, position: Int) {
         holder.setItem(getItem(position)!!)
-        holder.setIsRecyclable(false)
     }
 
     private var onItemClickListener: ((LocationsResults) -> Unit)? = null
@@ -61,7 +60,7 @@ class LocationsAdapter @Inject constructor() :
                 oldItem: LocationsResults,
                 newItem: LocationsResults
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem == newItem
             }
         }
     }

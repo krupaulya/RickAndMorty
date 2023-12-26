@@ -15,7 +15,10 @@ import java.io.IOException
 @OptIn(ExperimentalPagingApi::class)
 class LocationsRemoteMediator(
     private val locationsApi: LocationsApi,
-    private val database: RMDatabase
+    private val database: RMDatabase,
+    private val name: String?,
+    private val type: String?,
+    private val dimension: String?
 ) : RemoteMediator<Int, LocationsResults>() {
 
     override suspend fun initialize(): InitializeAction {
@@ -51,8 +54,37 @@ class LocationsRemoteMediator(
         }
 
         try {
-            val response = locationsApi.getLocations(page)
+            val response = when {
+                name != null && type != null && dimension != null -> locationsApi.getLocationsFiltered(
+                    page,
+                    name,
+                    type,
+                    dimension
+                )
 
+                name != null && type != null -> locationsApi.getNameAndTypeFiltered(
+                    page,
+                    name,
+                    type
+                )
+
+                name != null && dimension != null -> locationsApi.getNameAndDimensionFiltered(
+                    page,
+                    name,
+                    dimension
+                )
+
+                type != null && dimension != null -> locationsApi.getTypeAndDimensionFiltered(
+                    page,
+                    type,
+                    dimension
+                )
+
+                name != null -> locationsApi.getNameFiltered(page, name)
+                type != null -> locationsApi.getTypeFiltered(page, type)
+                dimension != null -> locationsApi.getDimensionFiltered(page, dimension)
+                else -> locationsApi.getLocations(page)
+            }
             val locations = response.results
             val endOfPaginationReached = locations.isEmpty()
             database.withTransaction {

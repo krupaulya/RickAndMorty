@@ -15,7 +15,9 @@ import java.io.IOException
 @OptIn(ExperimentalPagingApi::class)
 class EpisodesRemoteMediator(
     private val episodesApi: EpisodesApi,
-    private val database: RMDatabase
+    private val database: RMDatabase,
+    private val name: String?,
+    private val episode: String?
 ) : RemoteMediator<Int, EpisodesResults>() {
 
     override suspend fun initialize(): InitializeAction {
@@ -51,8 +53,12 @@ class EpisodesRemoteMediator(
         }
 
         try {
-            val response = episodesApi.getEpisodes(page)
-
+            val response = when {
+                name != null && episode != null -> episodesApi.getNameAndEpisodeFiltered(page, name, episode)
+                name != null -> episodesApi.getNameFiltered(page, name)
+                episode != null -> episodesApi.getEpisodeFiltered(page, episode)
+                else -> episodesApi.getEpisodes(page)
+            }
             val episodes = response.results
             val endOfPaginationReached = episodes.isEmpty()
             database.withTransaction {

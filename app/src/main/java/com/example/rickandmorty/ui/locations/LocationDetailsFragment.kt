@@ -47,20 +47,17 @@ class LocationDetailsFragment : Fragment() {
         charactersAdapterForDetails = CharactersAdapterForDetails()
         binding?.apply {
             locationsViewModel.getLocationById(locationId!!)
-            locationsViewModel.location.observe(viewLifecycleOwner) {
-                locationDetailName.text = it.name
-                locationDetailType.text = it.type
-                locationDetailDimension.text = it.dimension
-            }
             locDetailBackButton.setOnClickListener {
                 findNavController().popBackStack()
             }
             locationCharactersRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
             locationCharactersRecyclerView.adapter = charactersAdapterForDetails
-            locationsViewModel.characters.observe(viewLifecycleOwner) {
-                charactersAdapterForDetails.differ.submitList(it)
+            refreshDetailsLocation.setOnRefreshListener {
+                refreshDetailsLocation.isRefreshing = false
+                getLocation()
             }
         }
+        getLocation()
         locationsViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding?.locationDetailsProgressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
@@ -70,6 +67,19 @@ class LocationDetailsFragment : Fragment() {
                 R.id.action_locationDetailsFragment_to_characterDetailsFragment,
                 bundle
             )
+        }
+    }
+
+    private fun getLocation() {
+        locationsViewModel.location.observe(viewLifecycleOwner) {
+            binding?.apply {
+                locationDetailName.text = it.name
+                locationDetailType.text = it.type
+                locationDetailDimension.text = it.dimension
+            }
+            locationsViewModel.characters.observe(viewLifecycleOwner) {
+                charactersAdapterForDetails.differ.submitList(it)
+            }
         }
     }
 

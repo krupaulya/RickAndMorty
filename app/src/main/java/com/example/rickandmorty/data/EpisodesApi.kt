@@ -10,7 +10,9 @@ import retrofit2.http.Query
 interface EpisodesApi {
 
     @GET("episode")
-    suspend fun getEpisodes(@Query("page") page: Int): EpisodesResponse
+    suspend fun getEpisodes(
+        @Query("page") page: Int
+    ): EpisodesResponse
 
     @GET("episode/{id}")
     suspend fun getEpisodeById(
@@ -21,4 +23,24 @@ interface EpisodesApi {
     suspend fun getMultipleEpisodes(
         @Path("ids") ids: List<Int>
     ): Response<List<EpisodesResults>>
+
+    // One Filter
+    @GET("episode/")
+    suspend fun getNameFiltered(
+        @Query("page") page: Int,
+        @Query("name") name: String
+    ): EpisodesResponse
+
+    @GET("episode/")
+    suspend fun getEpisodeFiltered(
+        @Query("page") page: Int,
+        @Query("episode") episode: String
+    ): EpisodesResponse
+
+    @GET("episode/")
+    suspend fun getNameAndEpisodeFiltered(
+        @Query("page") page: Int,
+        @Query("name") name: String,
+        @Query("episode") episode: String
+    ): EpisodesResponse
 }

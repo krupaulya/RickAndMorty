@@ -37,7 +37,6 @@ class EpisodesAdapter @Inject constructor() :
 
     override fun onBindViewHolder(holder: EpisodesViewHolder, position: Int) {
         holder.setItem(getItem(position)!!)
-        holder.setIsRecyclable(false)
     }
 
     private var onItemClickListener: ((EpisodesResults) -> Unit)? = null
@@ -47,7 +46,8 @@ class EpisodesAdapter @Inject constructor() :
     }
 
     companion object {
-        private val diffUtilCallBack = object : DiffUtil.ItemCallback<EpisodesResults>() {
+        private val diffUtilCallBack =
+            object : DiffUtil.ItemCallback<EpisodesResults>() {
             override fun areItemsTheSame(
                 oldItem: EpisodesResults,
                 newItem: EpisodesResults
@@ -59,7 +59,7 @@ class EpisodesAdapter @Inject constructor() :
                 oldItem: EpisodesResults,
                 newItem: EpisodesResults
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem == newItem
             }
         }
     }

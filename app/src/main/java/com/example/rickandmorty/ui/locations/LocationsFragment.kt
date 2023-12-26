@@ -1,6 +1,8 @@
 package com.example.rickandmorty.ui.locations
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,13 +46,50 @@ class LocationsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLocationsBinding.bind(view)
         locationsAdapter = LocationsAdapter()
+        binding?.filterNameLoc?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                locationsViewModel.updateNameFilterValue(p0.toString())
+            }
+
+        })
+        binding?.filterTypeLoc?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                locationsViewModel.updateTypeFilterValue(p0.toString())
+            }
+
+        })
+        binding?.filterDimensionLoc?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                locationsViewModel.updateDimensionFilterValue(p0.toString())
+            }
+
+        })
+        getLocations()
         binding?.apply {
             locationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
             locationRecyclerView.adapter = locationsAdapter
             viewLifecycleOwner.apply {
                 lifecycleScope.launch {
                     repeatOnLifecycle(Lifecycle.State.CREATED) {
-                        locationsViewModel.getLocations().collect {
+                        locationsViewModel.getLocations(null, null, null).collect {
                             locationsAdapter.submitData(it)
                         }
                     }
@@ -71,15 +110,25 @@ class LocationsFragment : Fragment() {
             }
             locationsRefresh.setOnRefreshListener {
                 locationsRefresh.isRefreshing = false
-                viewLifecycleOwner.apply {
-                    lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            locationsViewModel.getLocations().collect {
-                                locationsAdapter.submitData(it)
-                            }
-                        }
-                    }
-                }
+                getLocations()
+            }
+            filterNameLoc.visibility = View.VISIBLE
+            filterTypeLoc.visibility = View.GONE
+            filterDimensionLoc.visibility = View.GONE
+            epFilterName.setOnClickListener {
+                filterNameLoc.visibility = View.VISIBLE
+                filterTypeLoc.visibility = View.GONE
+                filterDimensionLoc.visibility = View.GONE
+            }
+            epFilterType.setOnClickListener {
+                filterNameLoc.visibility = View.GONE
+                filterTypeLoc.visibility = View.VISIBLE
+                filterDimensionLoc.visibility = View.GONE
+            }
+            epFilterDimension.setOnClickListener {
+                filterNameLoc.visibility = View.GONE
+                filterTypeLoc.visibility = View.GONE
+                filterDimensionLoc.visibility = View.VISIBLE
             }
         }
         locationsAdapter.setOnItemClickListener {
@@ -89,6 +138,21 @@ class LocationsFragment : Fragment() {
                 bundle
             )
         }
+    }
+
+    private fun getLocations() {
+        locationsViewModel.getCombinedLiveData()
+            .observe(viewLifecycleOwner) { (name, type, dimension) ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    locationsViewModel.getLocations(
+                        name,
+                        type,
+                        dimension
+                    ).collect {
+                        locationsAdapter.submitData(it)
+                    }
+                }
+            }
     }
 
     override fun onDestroyView() {

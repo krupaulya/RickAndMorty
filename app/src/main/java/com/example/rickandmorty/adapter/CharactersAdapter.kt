@@ -44,9 +44,9 @@ class CharactersAdapter @Inject constructor(
         }
     }
 
-    private var onItemClickListener: ((CharactersResults) -> Unit)? = null
+    private var onItemClickListener: ((CharactersResults?) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (CharactersResults) -> Unit) {
+    fun setOnItemClickListener(listener: (CharactersResults?) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -58,7 +58,6 @@ class CharactersAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {
         holder.setItem(getItem(position)!!)
-        holder.setIsRecyclable(false)
     }
 
     companion object {
@@ -67,6 +66,7 @@ class CharactersAdapter @Inject constructor(
                 override fun areItemsTheSame(
                     oldItem: CharactersResults,
                     newItem: CharactersResults
+
                 ): Boolean {
                     return oldItem.id == newItem.id
                 }
@@ -74,8 +74,9 @@ class CharactersAdapter @Inject constructor(
                 override fun areContentsTheSame(
                     oldItem: CharactersResults,
                     newItem: CharactersResults
+
                 ): Boolean {
-                    return oldItem.id == newItem.id
+                    return oldItem == newItem
                 }
             }
     }

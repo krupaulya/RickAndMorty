@@ -48,20 +48,17 @@ class EpisodeDetailsFragment : Fragment() {
         charactersAdapterForDetails = CharactersAdapterForDetails()
         binding?.apply {
             episodesViewModel.getEpisodeById(episodeId!!)
-            episodesViewModel.episode.observe(viewLifecycleOwner) {
-                episodeDetailName.text = it.name
-                episodeDetailDate.text = it.airDate
-                episodeDetailEpisode.text = it.episode
-            }
             epDetailBackButton.setOnClickListener {
                 findNavController().popBackStack()
             }
             episodeCharactersRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
             episodeCharactersRecyclerView.adapter = charactersAdapterForDetails
-            episodesViewModel.characters.observe(viewLifecycleOwner) {
-                charactersAdapterForDetails.differ.submitList(it)
+            refreshDetailsEpisodes.setOnRefreshListener {
+                refreshDetailsEpisodes.isRefreshing = false
+                getEpisode(view)
             }
         }
+        getEpisode(view)
         episodesViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding?.episodeDetailsProgressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
@@ -71,6 +68,19 @@ class EpisodeDetailsFragment : Fragment() {
                 R.id.action_episodeDetailsFragment_to_characterDetailsFragment,
                 bundle
             )
+        }
+    }
+
+    private fun getEpisode(view: View) {
+        episodesViewModel.episode.observe(viewLifecycleOwner) {
+            binding?.apply {
+                episodeDetailName.text = it.name
+                episodeDetailDate.text = it.airDate
+                episodeDetailEpisode.text = it.episode
+            }
+        }
+        episodesViewModel.characters.observe(viewLifecycleOwner) {
+            charactersAdapterForDetails.differ.submitList(it)
         }
     }
 

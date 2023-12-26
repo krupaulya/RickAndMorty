@@ -1,6 +1,8 @@
 package com.example.rickandmorty.ui.episodes
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,18 +46,40 @@ class EpisodesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentEpisodesBinding.bind(view)
         episodesAdapter = EpisodesAdapter()
+        binding?.filterNameEp?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                episodesViewModel.updateNameFilterValue(p0.toString())
+            }
+
+        })
+        binding?.filterEpisodeEp?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                episodesViewModel.updateEpisodeFilterValue(p0.toString())
+            }
+
+        })
+        episodesViewModel.getCombinedLiveData().observe(viewLifecycleOwner) { (name, episode) ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                episodesViewModel.getEpisodes(name, episode).collect {
+                    episodesAdapter.submitData(it)
+                }
+            }
+        }
         binding?.apply {
             episodesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
             episodesRecyclerView.adapter = episodesAdapter
-            viewLifecycleOwner.apply {
-                lifecycleScope.launch {
-                    repeatOnLifecycle(Lifecycle.State.CREATED) {
-                        episodesViewModel.getEpisodes().collect {
-                            episodesAdapter.submitData(it)
-                        }
-                    }
-                }
-            }
             viewLifecycleOwner.apply {
                 lifecycleScope.launch {
                     repeatOnLifecycle(Lifecycle.State.CREATED) {
@@ -66,20 +90,40 @@ class EpisodesFragment : Fragment() {
                     }
                 }
             }
+            viewLifecycleOwner.apply {
+                lifecycleScope.launch {
+                    repeatOnLifecycle(Lifecycle.State.CREATED) {
+                        episodesViewModel.getEpisodes(
+                            null,
+                            null
+                        ).collect {
+                            episodesAdapter.submitData(it)
+                        }
+                    }
+                }
+            }
             episodeBackButton.setOnClickListener {
                 findNavController().popBackStack()
             }
             episodesRefresh.setOnRefreshListener {
                 episodesRefresh.isRefreshing = false
-                viewLifecycleOwner.apply {
-                    lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            episodesViewModel.getEpisodes().collect {
-                                episodesAdapter.submitData(it)
-                            }
+                episodesViewModel.getCombinedLiveData().observe(viewLifecycleOwner) { (name, episode) ->
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        episodesViewModel.getEpisodes(name, episode).collect {
+                            episodesAdapter.submitData(it)
                         }
                     }
                 }
+            }
+            filterEpisodeEp.visibility = View.GONE
+            filterNameEp.visibility = View.VISIBLE
+            filterNameTextView.setOnClickListener {
+                filterEpisodeEp.visibility = View.GONE
+                filterNameEp.visibility = View.VISIBLE
+            }
+            filterEpisodeTextView.setOnClickListener {
+                filterNameEp.visibility = View.GONE
+                filterEpisodeEp.visibility = View.VISIBLE
             }
         }
         episodesAdapter.setOnItemClickListener {

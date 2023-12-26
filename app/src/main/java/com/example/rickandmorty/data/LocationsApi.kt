@@ -16,8 +16,53 @@ interface LocationsApi {
         @Path("id") id: Int
     ): Response<LocationsResults>
 
-    @GET("location/{ids}")
-    suspend fun getMultipleLocations(
-        @Path("ids") ids: List<Int>
-    ): Response<List<LocationsResults>>
+    //one filter
+    @GET("location/")
+    suspend fun getNameFiltered(
+        @Query("page") page: Int,
+        @Query("name") name: String
+    ): LocationsResponse
+
+    @GET("location/")
+    suspend fun getTypeFiltered(
+        @Query("page") page: Int,
+        @Query("type") type: String
+    ): LocationsResponse
+
+    @GET("location/")
+    suspend fun getDimensionFiltered(
+        @Query("page") page: Int,
+        @Query("dimension") dimension: String
+    ): LocationsResponse
+
+    //two filters
+    @GET("location/")
+    suspend fun getNameAndTypeFiltered(
+        @Query("page") page: Int,
+        @Query("name") name: String,
+        @Query("type") type: String
+    ): LocationsResponse
+
+    @GET("location/")
+    suspend fun getNameAndDimensionFiltered(
+        @Query("page") page: Int,
+        @Query("name") name: String,
+        @Query("dimension") dimension: String
+    ): LocationsResponse
+
+    @GET("location/")
+    suspend fun getTypeAndDimensionFiltered(
+        @Query("page") page: Int,
+        @Query("type") type: String,
+        @Query("dimension") dimension: String
+    ): LocationsResponse
+
+    //three filters
+    @GET("location/")
+    suspend fun getLocationsFiltered(
+        @Query("page") page: Int,
+        @Query("name") name: String,
+        @Query("type") type: String,
+        @Query("dimension") dimension: String
+    ): LocationsResponse
 }

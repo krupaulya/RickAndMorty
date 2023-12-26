@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -46,6 +47,7 @@ class CharacterDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentCharacterDetailsBinding.bind(view)
         episodesAdapter = CharacterEpisodesAdapter()
+        charactersViewModel.getCharacterById(characterId!!)
         binding?.apply {
             chDetailBackButton.setOnClickListener {
                 findNavController().popBackStack()
@@ -55,24 +57,42 @@ class CharacterDetailsFragment : Fragment() {
             characterEpisodesRecyclerView.adapter = episodesAdapter
             characterDetailOrigin.setOnClickListener {
                 charactersViewModel.originID.observe(viewLifecycleOwner) {
-                    val bundle = bundleOf("locationId" to it)
-                    findNavController().navigate(
-                        R.id.action_characterDetailsFragment_to_locationDetailsFragment,
-                        bundle
-                    )
+                    if (it <= 0) {
+                        Toast.makeText(requireContext(), "The origin is unknown", Toast.LENGTH_LONG)
+                            .show()
+                    } else {
+                        val bundle = bundleOf("locationId" to it)
+                        findNavController().navigate(
+                            R.id.action_characterDetailsFragment_to_locationDetailsFragment,
+                            bundle
+                        )
+                    }
                 }
             }
             charactersViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
-                binding?.characterDetailsProgressBar?.visibility = if (isLoading) View.VISIBLE else View.GONE
+                binding?.characterDetailsProgressBar?.visibility =
+                    if (isLoading) View.VISIBLE else View.GONE
             }
             characterDetailLocation.setOnClickListener {
                 charactersViewModel.locationID.observe(viewLifecycleOwner) {
-                    val bundle = bundleOf("locationId" to it)
-                    findNavController().navigate(
-                        R.id.action_characterDetailsFragment_to_locationDetailsFragment,
-                        bundle
-                    )
+                    if (it <= 0) {
+                        Toast.makeText(
+                            requireContext(),
+                            "The location is unknown",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        val bundle = bundleOf("locationId" to it)
+                        findNavController().navigate(
+                            R.id.action_characterDetailsFragment_to_locationDetailsFragment,
+                            bundle
+                        )
+                    }
                 }
+            }
+            refreshDetailsCharacter.setOnRefreshListener {
+                refreshDetailsCharacter.isRefreshing = false
+                getCharacter(view)
             }
         }
         episodesAdapter.setOnItemClickListener {
@@ -82,7 +102,10 @@ class CharacterDetailsFragment : Fragment() {
                 bundle
             )
         }
-        charactersViewModel.getCharacterById(characterId!!)
+        getCharacter(view)
+
+    }
+    private fun getCharacter(view: View) {
         charactersViewModel.character.observe(viewLifecycleOwner) {
             binding?.apply {
                 Glide.with(view).load(it.image).into(characterDetailAvatar)

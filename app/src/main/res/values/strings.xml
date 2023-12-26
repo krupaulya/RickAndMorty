@@ -23,4 +23,6 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="genderless">Genderless</string>
+    <string name="search">Search</string>
+    <string name="no_results">No results</string>
 </resources>

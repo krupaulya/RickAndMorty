@@ -1,205 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/refresh_details_character"
     android:background="@color/pink"
-    android:orientation="vertical"
     tools:context=".ui.characters.CharacterDetailsFragment">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/ch_detail_back_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:src="@drawable/baseline_arrow_back_ios_24"
-        android:backgroundTint="@color/green"
-        android:contentDescription="@string/back_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/character_detail_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/character_avatar" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/character_detail_name"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_view" />
-
-    <TextView
-        android:id="@+id/character_detail_name_desc"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/name"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/card_view" />
-
-    <TextView
-        android:id="@+id/character_detail_status"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_name" />
-
-    <TextView
-        android:id="@+id/character_detail_status_desc"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/status"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_name_desc" />
-
-
-    <TextView
-        android:id="@+id/character_detail_species"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_status" />
-
-    <TextView
-        android:id="@+id/character_detail_species_desc"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/species"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_status_desc" />
-
-    <TextView
-        android:id="@+id/character_detail_gender"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_species" />
-
-    <TextView
-        android:id="@+id/character_detail_gender_desc"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/gender"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_species_desc" />
-
-    <TextView
-        android:id="@+id/character_detail_type"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_gender" />
-
-    <TextView
-        android:id="@+id/character_detail_type_desc"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/type"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_gender_desc" />
-
-    <TextView
-        android:id="@+id/character_detail_origin"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_type" />
-
-    <TextView
-        android:id="@+id/character_detail_origin_desc"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/origin"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_type_desc" />
-
-    <TextView
-        android:id="@+id/character_detail_location"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_origin" />
-
-    <TextView
-        android:id="@+id/character_detail_location_desc"
-        android:layout_width="100dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/location"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_origin_desc" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/character_episodes_recycler_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/character_detail_location"
-        tools:listitem="@layout/shared_recycler_item" />
+        android:layout_height="match_parent">
 
-    <ProgressBar
-        android:id="@+id/character_details_progress_bar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/ch_detail_back_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:src="@drawable/baseline_arrow_back_ios_24"
+            android:backgroundTint="@color/green"
+            android:contentDescription="@string/back_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/character_detail_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/character_avatar" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/character_detail_name"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_view" />
+
+        <TextView
+            android:id="@+id/character_detail_name_desc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/name"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/card_view" />
+
+        <TextView
+            android:id="@+id/character_detail_status"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_name" />
+
+        <TextView
+            android:id="@+id/character_detail_status_desc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/status"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_name_desc" />
+
+
+        <TextView
+            android:id="@+id/character_detail_species"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_status" />
+
+        <TextView
+            android:id="@+id/character_detail_species_desc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/species"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_status_desc" />
+
+        <TextView
+            android:id="@+id/character_detail_gender"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_species" />
+
+        <TextView
+            android:id="@+id/character_detail_gender_desc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/gender"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_species_desc" />
+
+        <TextView
+            android:id="@+id/character_detail_type"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_gender" />
+
+        <TextView
+            android:id="@+id/character_detail_type_desc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/type"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_gender_desc" />
+
+        <TextView
+            android:id="@+id/character_detail_origin"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_type" />
+
+        <TextView
+            android:id="@+id/character_detail_origin_desc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/origin"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_type_desc" />
+
+        <TextView
+            android:id="@+id/character_detail_location"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_origin" />
+
+        <TextView
+            android:id="@+id/character_detail_location_desc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/location"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_origin_desc" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/character_episodes_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/character_detail_location"
+            tools:listitem="@layout/shared_recycler_item" />
+
+        <ProgressBar
+            android:id="@+id/character_details_progress_bar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 

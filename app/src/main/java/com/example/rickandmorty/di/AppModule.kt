@@ -1,11 +1,9 @@
 package com.example.rickandmorty.di
 
 import android.content.Context
-import android.net.ConnectivityManager
-import com.example.rickandmorty.ConnectivityObserver
-import com.example.rickandmorty.NetworkConnectivityObserver
-import com.example.rickandmorty.data.EpisodesApi
+import com.example.rickandmorty.ConnectivityUtils
 import com.example.rickandmorty.data.CharactersApi
+import com.example.rickandmorty.data.EpisodesApi
 import com.example.rickandmorty.data.LocationsApi
 import dagger.Module
 import dagger.Provides
@@ -78,14 +76,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideConnectivityObserver(@ApplicationContext context: Context): ConnectivityObserver {
-        return NetworkConnectivityObserver(context)
+    fun provideConnectivityUtils(@ApplicationContext context: Context): ConnectivityUtils {
+        return ConnectivityUtils(context)
     }
-
-    @Provides
-    @Singleton
-    fun provideConnectivityManager(@ApplicationContext context: Context): ConnectivityManager {
-        return context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    }
-
 }

@@ -8,27 +8,18 @@
     android:orientation="vertical"
     tools:context=".ui.locations.LocationsFragment">
 
-    <SearchView
-        android:id="@+id/search_view_locations"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
     <LinearLayout
-        android:id="@+id/layout_filer_loc"
+        android:id="@+id/filter_layout_location"
         android:layout_width="match_parent"
-        android:layout_below="@+id/search_view_locations"
         android:layout_height="70dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view_locations">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/ep_filer_name"
+            android:id="@+id/ep_filter_name"
             android:layout_width="110dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -40,7 +31,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/ep_filer_type"
+            android:id="@+id/ep_filter_type"
             android:layout_width="110dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -52,7 +43,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/ep_filer_dimension"
+            android:id="@+id/ep_filter_dimension"
             android:layout_width="110dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -65,15 +56,50 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/locationFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_layout_location">
+
+        <EditText
+            android:id="@+id/filter_name_loc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="name"
+            android:inputType="textPersonName"
+            android:hint="@string/name"/>
+
+        <EditText
+            android:id="@+id/filter_type_loc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="type"
+            android:inputType="text"
+            android:hint="@string/type"/>
+
+        <EditText
+            android:id="@+id/filter_dimension_loc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="dimension"
+            android:inputType="text"
+            android:hint="@string/dimension"/>
+
+    </FrameLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/locations_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_filer_loc"
         android:layout_marginTop="140dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_filer_loc">
+        app:layout_constraintTop_toBottomOf="@+id/locationFrameLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/location_recycler_view"
